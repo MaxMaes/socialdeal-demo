@@ -1,5 +1,7 @@
 package nl.mythicproductions.socialdealdemo.data.deal
 
+import kotlinx.serialization.Serializable
+
 /**
  * {
  *       "unique": "x6ji36jvyi4mj9fk",
@@ -28,6 +30,8 @@ package nl.mythicproductions.socialdealdemo.data.deal
  *       }
  *     }
  */
+
+@Serializable
 // Generate a data class for this JSON structure
 data class Deal(
     /**
@@ -38,6 +42,11 @@ data class Deal(
      * Title of the deal
      */
     val title: String,
+    /**
+     * Description of the deal
+     * Only available from the detail endpoint
+     */
+    val description: String = "",
     /**
      * Image of the deal
      */
@@ -60,6 +69,11 @@ data class Deal(
     val prices: Prices
 )
 
+val Deal.imageUrl: String
+    // TODO: Hard-coded base URL, should be dynamic, ideally env based
+    get() = "https://images.socialdeal.nl$image"
+
+@Serializable
 data class Prices(
     /**
      * Price of the deal
@@ -68,18 +82,20 @@ data class Prices(
     /**
      * Base price of the deal
      */
-    val fromPrice: Price,
+    val fromPrice: Price?,
     /**
      * Label for the price of the deal
      */
-    val discountLabel: String
+    val discountLabel: String?
 )
 
+@Serializable
 data class Price(
     val amount: Int,
     val currency: Currency
 )
 
+@Serializable
 data class Currency(
     val symbol: String,
     val code: String

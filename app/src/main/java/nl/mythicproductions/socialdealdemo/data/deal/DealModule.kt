@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 @Module
 abstract class DealModule {
     @Binds
-    abstract fun bindDealDatasource(datasource: FakeDealDatasourceImpl): DealDatasource
+    abstract fun bindDealDatasource(datasource: DealDatasourceImpl): DealDatasource
 
     @Binds
     abstract fun bindDealRepository(repository: DealRepositoryImpl): DealRepository

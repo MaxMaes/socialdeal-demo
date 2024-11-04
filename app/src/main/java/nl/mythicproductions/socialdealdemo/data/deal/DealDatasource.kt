@@ -14,5 +14,5 @@ interface DealDatasource {
      * @param id The id of the deal
      * @return The deal with the given id or null if no deal was found
      */
-    suspend fun loadDealById(id: Int): Deal?
+    suspend fun loadDealById(id: String): Deal?
 }

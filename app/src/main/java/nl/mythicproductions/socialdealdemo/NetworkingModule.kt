@@ -30,6 +30,7 @@ annotation class DealsClient
 object NetworkingModule {
 
     @OptIn(ExperimentalSerializationApi::class)
+    @Provides
     fun provideJSONConfig(): Json {
         return Json {
             prettyPrint = true

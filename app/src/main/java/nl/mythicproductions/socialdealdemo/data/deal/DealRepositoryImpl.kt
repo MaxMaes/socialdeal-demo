@@ -7,7 +7,7 @@ class DealRepositoryImpl @Inject constructor(val datasource: DealDatasource) : D
         return datasource.loadDeals()
     }
 
-    override suspend fun getDealById(id: Int): Deal? {
+    override suspend fun getDealById(id: String): Deal? {
         return datasource.loadDealById(id)
     }
 }

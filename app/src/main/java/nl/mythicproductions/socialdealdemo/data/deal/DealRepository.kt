@@ -9,5 +9,5 @@ interface DealRepository {
     /**
      * Get deal by id
      */
-    suspend fun getDealById(id: Int): Deal?
+    suspend fun getDealById(id: String): Deal?
 }

@@ -1,40 +1,29 @@
 package nl.mythicproductions.socialdealdemo.data.deal
 
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.url
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import nl.mythicproductions.socialdealdemo.DealsClient
+import javax.inject.Inject
 
-class DealDatasourceImpl constructor(@DealsClient private val httpClient: HttpClient): DealDatasource {
-    override suspend fun loadDeals(): List<Deal> {
-        return listOf(
-            Deal(
-                "x6ji36jvyi4mj9fk",
-                "Bioscoopticket + popcorn + drankje bij Corendon Cinema",
-                "/deal/corendon-village-hotel-amsterdam-22113009143271.jpg",
-                "Verkocht: 19",
-                "Corendon Village Hotel Amsterdam",
-                "Badhoevedorp (7 km)",
-                Prices(
-                    Price(
-                        1250,
-                        Currency(
-                            "€",
-                            "EUR"
-                        )
-                    ),
-                    Price(
-                        1700,
-                        Currency(
-                            "€",
-                            "EUR"
-                        )
-                    ),
-                    "26%"
-                )
-            )
-        )
+@Serializable
+data class DealListResponse(val deals: List<Deal>, val numDeals: Int)
+
+class DealDatasourceImpl @Inject constructor(@DealsClient private val httpClient: HttpClient) :
+    DealDatasource {
+    override suspend fun loadDeals(): List<Deal> = withContext(Dispatchers.IO) {
+        val response = httpClient.get {
+            url("demo/deals.json")
+        }.body<DealListResponse>()
+
+        response.deals
     }
 
-    override suspend fun loadDealById(id: Int): Deal? {
+    override suspend fun loadDealById(id: String): Deal? {
         return null
     }
 }

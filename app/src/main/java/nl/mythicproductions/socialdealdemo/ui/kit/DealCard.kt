@@ -37,11 +37,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import nl.mythicproductions.socialdealdemo.R
 import nl.mythicproductions.socialdealdemo.data.deal.Currency
 import nl.mythicproductions.socialdealdemo.data.deal.Deal
 import nl.mythicproductions.socialdealdemo.data.deal.Price
 import nl.mythicproductions.socialdealdemo.data.deal.Prices
+import nl.mythicproductions.socialdealdemo.data.deal.imageUrl
 import nl.mythicproductions.socialdealdemo.ui.theme.Blue
 import nl.mythicproductions.socialdealdemo.ui.theme.SocialDealDemoTheme
 
@@ -56,14 +56,19 @@ fun DealCard(
     val context = LocalContext.current
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
-            .data(data = R.drawable.preview_asset)
+            .data(data = deal.imageUrl)
             .crossfade(true)
             .build(),
         contentScale = ContentScale.Crop
     )
     val imageState by painter.state.collectAsStateWithLifecycle()
 
-    Column(modifier = Modifier.clickable(onClick = onClick).then(modifier)) {
+    Column(
+        verticalArrangement = spacedBy(8.dp),
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .then(modifier)
+    ) {
         Box {
             Image(
                 painter = painter,
@@ -90,7 +95,7 @@ fun DealCard(
             }
         }
 
-        Column(verticalArrangement = spacedBy(8.dp)) {
+        Column(verticalArrangement = spacedBy(12.dp)) {
             Text(
                 text = deal.title,
                 style = MaterialTheme.typography.titleMedium.copy(fontSize = 20.sp)
@@ -118,8 +123,10 @@ fun DealCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = spacedBy(4.dp)
                 ) {
-                    DiscountedPriceDisplay(price = deal.prices.fromPrice)
-                    OriginalPriceDisplay(price = deal.prices.price)
+                    if (deal.prices.fromPrice != null) {
+                        DiscountedPriceDisplay(price = deal.prices.fromPrice)
+                    }
+                    CurrentPriceDisplay(price = deal.prices.price)
                 }
             }
         }
@@ -135,6 +142,7 @@ fun DealCardPreview() {
                 Deal(
                     "x6ji36jvyi4mj9fk",
                     "Bioscoopticket + popcorn + drankje bij Corendon Cinema",
+                    "description",
                     "/deal/corendon-village-hotel-amsterdam-22113009143271.jpg",
                     "Verkocht: 19",
                     "Corendon Village Hotel Amsterdam",

@@ -1,6 +1,5 @@
 package nl.mythicproductions.socialdealdemo.ui.kit
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +12,7 @@ import nl.mythicproductions.socialdealdemo.ui.theme.Green
 import nl.mythicproductions.socialdealdemo.ui.theme.PriceFont
 
 @Composable
-fun OriginalPriceDisplay(price: Price, modifier: Modifier = Modifier) {
+fun CurrentPriceDisplay(price: Price, modifier: Modifier = Modifier) {
     PriceText(price, modifier, PriceFont.copy(color = Green))
 }
 
