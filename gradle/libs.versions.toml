@@ -66,7 +66,6 @@ coil3-test = { group = "io.coil-kt.coil3", name = "coil-test", version.ref = "co
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
