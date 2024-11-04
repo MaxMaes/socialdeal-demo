@@ -63,7 +63,7 @@ fun DealCard(
     )
     val imageState by painter.state.collectAsStateWithLifecycle()
 
-    Column(modifier = Modifier.clickable(onClick = onClick)) {
+    Column(modifier = Modifier.clickable(onClick = onClick).then(modifier)) {
         Box {
             Image(
                 painter = painter,

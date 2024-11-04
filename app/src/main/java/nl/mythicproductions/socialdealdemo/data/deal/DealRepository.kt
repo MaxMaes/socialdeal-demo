@@ -4,10 +4,10 @@ interface DealRepository {
     /**
      * Get all deals
      */
-    fun getDeals(): List<Deal>
+    suspend fun getDeals(): List<Deal>
 
     /**
      * Get deal by id
      */
-    fun getDealById(id: Int): Deal?
+    suspend fun getDealById(id: Int): Deal?
 }

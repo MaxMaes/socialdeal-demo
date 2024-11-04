@@ -6,7 +6,7 @@ interface DealDatasource {
      *
      * @return A list of all deals, can be empty if no deals are found
      */
-    fun loadDeals(): List<Deal>
+    suspend fun loadDeals(): List<Deal>
 
     /**
      * Load a deal by its id
@@ -14,5 +14,5 @@ interface DealDatasource {
      * @param id The id of the deal
      * @return The deal with the given id or null if no deal was found
      */
-    fun loadDealById(id: Int): Deal?
+    suspend fun loadDealById(id: Int): Deal?
 }
