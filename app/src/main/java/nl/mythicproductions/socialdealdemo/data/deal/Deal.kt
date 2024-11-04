@@ -30,7 +30,6 @@ import kotlinx.serialization.Serializable
  *       }
  *     }
  */
-
 @Serializable
 // Generate a data class for this JSON structure
 data class Deal(
@@ -82,11 +81,7 @@ data class Prices(
     /**
      * Base price of the deal
      */
-    val fromPrice: Price?,
-    /**
-     * Label for the price of the deal
-     */
-    val discountLabel: String?
+    val fromPrice: Price?
 )
 
 @Serializable
@@ -99,4 +94,12 @@ data class Price(
 data class Currency(
     val symbol: String,
     val code: String
+)
+
+/**
+ * Additional data for the deal, only available from the detail endpoint
+ */
+@Serializable
+data class DealDescription(
+    val description: String
 )

@@ -161,8 +161,7 @@ fun DealCardPreview() {
                                 "€",
                                 "EUR"
                             )
-                        ),
-                        "26%"
+                        )
                     )
                 )
             )
