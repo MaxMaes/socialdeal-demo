@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import nl.mythicproductions.socialdealdemo.ui.navigation.RootNavigator
 import nl.mythicproductions.socialdealdemo.ui.theme.SocialDealDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,12 +20,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SocialDealDemoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                RootNavigator()
             }
         }
     }
