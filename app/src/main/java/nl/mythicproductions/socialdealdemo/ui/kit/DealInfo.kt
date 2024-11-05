@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import nl.mythicproductions.socialdealdemo.data.deal.Deal
 import nl.mythicproductions.socialdealdemo.ui.theme.Blue
+import nl.mythicproductions.socialdealdemo.ui.theme.GrayMedium
 
 @Composable
 fun DealInfo(deal: Deal) {
@@ -25,11 +26,11 @@ fun DealInfo(deal: Deal) {
         Column {
             Text(
                 text = deal.company,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge.copy(color = GrayMedium)
             )
             Text(
                 text = deal.city,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge.copy(color = GrayMedium)
             )
         }
         Row(
