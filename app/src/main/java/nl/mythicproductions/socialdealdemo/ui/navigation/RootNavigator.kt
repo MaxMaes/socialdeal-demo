@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -23,43 +25,50 @@ import nl.mythicproductions.socialdealdemo.ui.screens.deals.DealsScreen
 import nl.mythicproductions.socialdealdemo.ui.screens.favorites.FavoritesScreen
 import nl.mythicproductions.socialdealdemo.ui.screens.settings.SettingsScreen
 
+val LocalCurrencyIndicator = compositionLocalOf<String> { error("No currency indicator provided") }
+
 @Composable
 fun RootNavigator() {
     val navController = rememberNavController()
-    Scaffold(
-        bottomBar = {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
 
-            val isVisible = bottomBarRoutes.any { rootRoute ->
-                currentDestination?.hierarchy?.any { it.hasRoute(rootRoute.route::class) } == true
+    CompositionLocalProvider(
+        LocalCurrencyIndicator provides "€"
+    ) {
+        Scaffold(
+            bottomBar = {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+
+                val isVisible = bottomBarRoutes.any { rootRoute ->
+                    currentDestination?.hierarchy?.any { it.hasRoute(rootRoute.route::class) } == true
+                }
+
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = slideInVertically(initialOffsetY = { it / 2 }),
+                    exit = slideOutVertically(targetOffsetY = { it })
+                ) {
+                    BottomTabBar(rootRoutes = bottomBarRoutes, navController = navController)
+                }
             }
-
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = slideInVertically(initialOffsetY = { it / 2 }),
-                exit = slideOutVertically(targetOffsetY = { it })
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = DealsRoute,
+                modifier = Modifier
+                    .consumeWindowInsets(innerPadding)
+                    .padding(innerPadding)
             ) {
-                BottomTabBar(rootRoutes = bottomBarRoutes, navController = navController)
-            }
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = DealsRoute,
-            modifier = Modifier
-                .consumeWindowInsets(innerPadding)
-                .padding(innerPadding)
-        ) {
-            composable<DealsRoute> { DealsScreen(navController = navController) }
-            composable<FavoritesRoute> { FavoritesScreen(navController = navController) }
-            composable<SettingsRoute> { SettingsScreen() }
+                composable<DealsRoute> { DealsScreen(navController = navController) }
+                composable<FavoritesRoute> { FavoritesScreen(navController = navController) }
+                composable<SettingsRoute> { SettingsScreen() }
 
-            composable<DealDetailRoute> {
-                DealDetailScreen(
-                    navController = navController,
-                    dealId = it.toRoute<DealDetailRoute>().dealId
-                )
+                composable<DealDetailRoute> {
+                    DealDetailScreen(
+                        navController = navController,
+                        dealId = it.toRoute<DealDetailRoute>().dealId
+                    )
+                }
             }
         }
     }

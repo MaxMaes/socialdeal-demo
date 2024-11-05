@@ -7,6 +7,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import nl.mythicproductions.socialdealdemo.data.deal.Price
+import nl.mythicproductions.socialdealdemo.ui.navigation.LocalCurrencyIndicator
 import nl.mythicproductions.socialdealdemo.ui.theme.GrayMedium
 import nl.mythicproductions.socialdealdemo.ui.theme.Green
 import nl.mythicproductions.socialdealdemo.ui.theme.PriceFont
@@ -40,7 +41,7 @@ private fun PriceText(
     val formatted = String.format(Locale.getDefault(), "%.2f", price.amount / 100.0)
 
     Text(
-        text = "${price.currency.symbol} $formatted",
+        text = "${LocalCurrencyIndicator.current} $formatted",
         style = textStyle
     )
 }
