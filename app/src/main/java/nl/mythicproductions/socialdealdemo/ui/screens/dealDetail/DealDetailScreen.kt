@@ -1,18 +1,15 @@
 package nl.mythicproductions.socialdealdemo.ui.screens.dealDetail
 
 import android.widget.TextView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,8 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
@@ -51,16 +46,21 @@ fun DealDetailScreen(
 
     val deal by viewModel.deal.collectAsStateWithLifecycle()
 
-    DealDetailScreenLayout(deal, onBackPressed = { navController.navigateUp() })
+    DealDetailScreenLayout(deal, onAction = { action ->
+        when (action) {
+            is DealDetailScreenAction.NavigateUp -> navController.navigateUp()
+            is DealDetailScreenAction.FavoriteDeal -> viewModel.favoriteDeal(action.dealId)
+            is DealDetailScreenAction.UnfavoriteDeal -> viewModel.unfavoriteDeal(action.dealId)
+        }
+    })
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DealDetailScreenLayout(deal: UIState<Deal?>, onBackPressed: () -> Unit) {
+fun DealDetailScreenLayout(deal: UIState<Deal?>, onAction: (DealDetailScreenAction) -> Unit) {
     Scaffold(
         topBar = {
             Row(modifier = Modifier.fillMaxWidth()) {
-                IconButton(onClick = onBackPressed) {
+                IconButton(onClick = { onAction(DealDetailScreenAction.NavigateUp) }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
                         contentDescription = "Back",
@@ -79,7 +79,20 @@ fun DealDetailScreenLayout(deal: UIState<Deal?>, onBackPressed: () -> Unit) {
                 } else {
                     // Show deal data
                     Column(modifier = Modifier.padding()) {
-                        DealImage(deal = dealData, onFavoriteClicked = {})
+                        DealImage(
+                            deal = dealData,
+                            isFavorite = dealData.isFavorite,
+                            onFavoriteClicked = {
+                                if (dealData.isFavorite) {
+                                    onAction(
+                                        DealDetailScreenAction.UnfavoriteDeal(
+                                            dealData.unique
+                                        )
+                                    )
+                                } else {
+                                    onAction(DealDetailScreenAction.FavoriteDeal(dealData.unique))
+                                }
+                            })
                         Column(modifier = Modifier.padding(16.dp)) {
                             DealInfo(deal = dealData)
                             // TODO: Parse HTML description to AnnotatedString so we can use it in Text instead of AndroidView
@@ -100,5 +113,10 @@ fun DealDetailScreenLayout(deal: UIState<Deal?>, onBackPressed: () -> Unit) {
             }
         }
     }
+}
 
+sealed class DealDetailScreenAction {
+    object NavigateUp : DealDetailScreenAction()
+    data class FavoriteDeal(val dealId: String) : DealDetailScreenAction()
+    data class UnfavoriteDeal(val dealId: String) : DealDetailScreenAction()
 }

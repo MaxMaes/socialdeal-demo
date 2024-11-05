@@ -12,23 +12,32 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import nl.mythicproductions.socialdealdemo.data.deal.DealRepository
+import nl.mythicproductions.socialdealdemo.data.favorites.FavoriteRepository
 import nl.mythicproductions.socialdealdemo.ui.UIState
 import javax.inject.Inject
 
 @HiltViewModel
-class DealDetailViewModel @Inject constructor(private val dealRepository: DealRepository) :
+class DealDetailViewModel @Inject constructor(
+    private val dealRepository: DealRepository,
+    private val favoriteRepository: FavoriteRepository
+) :
     ViewModel() {
     private val reloadTriggerFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val dealId = MutableStateFlow<String?>(null)
+    private val favorites = favoriteRepository.getFavoritesFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val deal = combine(dealId, reloadTriggerFlow) { id, _ -> id }
+    private val dealData = combine(dealId, reloadTriggerFlow) { id, _ -> id }
         .filterNotNull()
         .mapLatest { id ->
             // Load deal by id
-            val result = dealRepository.getDealById(id)
-            UIState.Success(result)
-        }.stateIn(
+            dealRepository.getDealById(id)
+        }
+
+    val deal = combine(favorites, dealData) { favorites, deal ->
+        val processed = deal?.copy(isFavorite = favorites.contains(deal.unique))
+        UIState.Success(processed)
+    }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = UIState.Idle
@@ -36,5 +45,13 @@ class DealDetailViewModel @Inject constructor(private val dealRepository: DealRe
 
     fun setDealId(id: String) {
         dealId.update { id }
+    }
+
+    fun favoriteDeal(dealId: String) {
+        favoriteRepository.addFavorite(dealId)
+    }
+
+    fun unfavoriteDeal(dealId: String) {
+        favoriteRepository.removeFavorite(dealId)
     }
 }
