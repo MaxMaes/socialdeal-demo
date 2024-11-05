@@ -1,12 +1,9 @@
 package nl.mythicproductions.socialdealdemo.ui.kit
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +27,9 @@ fun EmptyState(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(top = 24.dp).fillMaxWidth(),
+        modifier = modifier
+            .padding(top = 24.dp)
+            .fillMaxWidth(),
         verticalArrangement = spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

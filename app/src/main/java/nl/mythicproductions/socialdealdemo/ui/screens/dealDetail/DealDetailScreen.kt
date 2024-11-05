@@ -128,7 +128,7 @@ fun DealDetailScreenLayout(deal: UIState<Deal?>, onAction: (DealDetailScreenActi
 }
 
 sealed class DealDetailScreenAction {
-    object NavigateUp : DealDetailScreenAction()
+    data object NavigateUp : DealDetailScreenAction()
     data class FavoriteDeal(val dealId: String) : DealDetailScreenAction()
     data class UnfavoriteDeal(val dealId: String) : DealDetailScreenAction()
 }
