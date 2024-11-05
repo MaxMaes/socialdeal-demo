@@ -10,6 +10,7 @@ import nl.mythicproductions.socialdealdemo.data.deal.Price
 import nl.mythicproductions.socialdealdemo.ui.theme.GrayMedium
 import nl.mythicproductions.socialdealdemo.ui.theme.Green
 import nl.mythicproductions.socialdealdemo.ui.theme.PriceFont
+import java.util.Locale
 
 @Composable
 fun CurrentPriceDisplay(price: Price, modifier: Modifier = Modifier) {
@@ -36,8 +37,10 @@ private fun PriceText(
     modifier: Modifier = Modifier,
     textStyle: TextStyle = PriceFont
 ) {
+    val formatted = String.format(Locale.getDefault(), "%.2f", price.amount / 100.0)
+
     Text(
-        text = "${price.currency.symbol} ${price.amount}",
+        text = "${price.currency.symbol} $formatted",
         style = textStyle
     )
 }
