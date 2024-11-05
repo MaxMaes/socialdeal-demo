@@ -20,15 +20,23 @@ import nl.mythicproductions.socialdealdemo.ui.screens.dealDetail.DealDetailRoute
 fun DealsScreen(navController: NavController, viewModel: DealsScreenViewModel = hiltViewModel()) {
     val deals by viewModel.deals.collectAsStateWithLifecycle()
 
-    DealsScreenLayout(deals = deals, onDealClicked = { deal ->
-        navController.navigate(DealDetailRoute(dealId = deal.unique))
+    DealsScreenLayout(
+        deals = deals,
+        onAction = { action ->
+        when (action) {
+            is DealScreenActions.NavigateToDealDetail -> {
+                navController.navigate(DealDetailRoute(dealId = action.dealId))
+            }
+            is DealScreenActions.FavoriteDeal -> viewModel.favoriteDeal(action.dealId)
+            is DealScreenActions.UnfavoriteDeal -> viewModel.unfavoriteDeal(action.dealId)
+        }
     })
 }
 
 @Composable
 fun DealsScreenLayout(
     deals: List<Deal>,
-    onDealClicked: (Deal) -> Unit
+    onAction: (DealScreenActions) -> Unit
 ) {
     LazyColumn(
         verticalArrangement = spacedBy(16.dp),
@@ -37,9 +45,24 @@ fun DealsScreenLayout(
         items(deals) { deal ->
             DealCard(
                 deal = deal,
-                onClick = { onDealClicked(deal) },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                onClick = { onAction(DealScreenActions.NavigateToDealDetail(deal.unique)) },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                onFavoriteClicked = {
+                    onAction(
+                        if (deal.isFavorite) {
+                            DealScreenActions.UnfavoriteDeal(deal.unique)
+                        } else {
+                            DealScreenActions.FavoriteDeal(deal.unique)
+                        }
+                    )
+                }
             )
         }
     }
+}
+
+sealed class DealScreenActions {
+    data class NavigateToDealDetail(val dealId: String) : DealScreenActions()
+    data class FavoriteDeal(val dealId: String) : DealScreenActions()
+    data class UnfavoriteDeal(val dealId: String) : DealScreenActions()
 }

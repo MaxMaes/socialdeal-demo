@@ -19,7 +19,6 @@ import nl.mythicproductions.socialdealdemo.ui.theme.SocialDealDemoTheme
 @Composable
 fun DealCard(
     deal: Deal,
-    isFavorite: Boolean = false,
     onFavoriteClicked: () -> Unit = {},
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -32,7 +31,7 @@ fun DealCard(
     ) {
         DealImage(
             deal = deal,
-            isFavorite = isFavorite,
+            isFavorite = deal.isFavorite,
             onFavoriteClicked = onFavoriteClicked,
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))

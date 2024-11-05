@@ -1,4 +1,4 @@
-package nl.mythicproductions.socialdealdemo.ui.screens.deals
+package nl.mythicproductions.socialdealdemo.ui.screens.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import nl.mythicproductions.socialdealdemo.data.favorites.FavoriteRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class DealsScreenViewModel @Inject constructor(
+class FavoritesViewModel @Inject constructor(
     private val dealRepository: DealRepository,
     private val favoriteRepository: FavoriteRepository
 ) :
@@ -28,8 +28,8 @@ class DealsScreenViewModel @Inject constructor(
     }
 
     val deals = combine(dealsData, favorites) { deals, favorites ->
-        deals.map { deal ->
-            deal.copy(isFavorite = favorites.contains(deal.unique))
+        deals.filter { favorites.contains(it.unique) }.map { deal ->
+            deal.copy(isFavorite = true)
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 

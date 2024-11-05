@@ -24,9 +24,15 @@ fun RootNavigator() {
             BottomTabBar(rootRoutes = bottomBarRoutes, navController = navController)
         }
     ) { innerPadding ->
-        NavHost(navController, startDestination = DealsRoute, Modifier.consumeWindowInsets(innerPadding).padding(innerPadding)) {
+        NavHost(
+            navController = navController,
+            startDestination = DealsRoute,
+            modifier = Modifier
+                .consumeWindowInsets(innerPadding)
+                .padding(innerPadding)
+        ) {
             composable<DealsRoute> { DealsScreen(navController = navController) }
-            composable<FavoritesRoute> { FavoritesScreen() }
+            composable<FavoritesRoute> { FavoritesScreen(navController = navController) }
             composable<SettingsRoute> { SettingsScreen() }
 
             composable<DealDetailRoute> {

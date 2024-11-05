@@ -65,7 +65,11 @@ data class Deal(
     /**
      * Prices for the deal
      */
-    val prices: Prices
+    val prices: Prices,
+    /**
+     * Whether the deal is favorited
+     */
+    val isFavorite: Boolean = false
 )
 
 val Deal.imageUrl: String

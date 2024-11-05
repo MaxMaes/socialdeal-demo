@@ -53,7 +53,7 @@ fun DealImage(
                 .aspectRatio(16f / 9f)
         )
         IconButton(
-            onClick = {},
+            onClick = onFavoriteClicked,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .semantics {
@@ -64,7 +64,7 @@ fun DealImage(
             Icon(
                 imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                 contentDescription = "Favorite",
-                tint = MaterialTheme.colorScheme.inverseOnSurface
+                tint = MaterialTheme.colorScheme.errorContainer
             )
         }
     }
