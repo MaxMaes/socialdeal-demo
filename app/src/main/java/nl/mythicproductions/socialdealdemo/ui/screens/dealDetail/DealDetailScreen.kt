@@ -1,6 +1,7 @@
 package nl.mythicproductions.socialdealdemo.ui.screens.dealDetail
 
 import android.widget.TextView
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -18,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
@@ -71,7 +75,9 @@ fun DealDetailScreenLayout(deal: UIState<Deal?>, onAction: (DealDetailScreenActi
         },
         contentWindowInsets = WindowInsets.navigationBars
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
+        Box(modifier = Modifier
+            .padding(innerPadding)
+            .verticalScroll(rememberScrollState())) {
             if (deal is UIState.Success) {
                 val dealData = deal.data
                 if (dealData == null) {
@@ -93,11 +99,16 @@ fun DealDetailScreenLayout(deal: UIState<Deal?>, onAction: (DealDetailScreenActi
                                     onAction(DealDetailScreenAction.FavoriteDeal(dealData.unique))
                                 }
                             })
-                        Column(modifier = Modifier.padding(16.dp)) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = spacedBy(16.dp)
+                        ) {
                             DealInfo(deal = dealData)
                             // TODO: Parse HTML description to AnnotatedString so we can use it in Text instead of AndroidView
 //                Text(dealData.description, style = MaterialTheme.typography.bodyMedium)
 
+
+                            val textColor = MaterialTheme.colorScheme.onSurface
                             AndroidView(
                                 factory = { context -> TextView(context) },
                                 update = {
@@ -105,6 +116,7 @@ fun DealDetailScreenLayout(deal: UIState<Deal?>, onAction: (DealDetailScreenActi
                                         dealData.description,
                                         HtmlCompat.FROM_HTML_MODE_COMPACT
                                     )
+                                    it.setTextColor(textColor.toArgb())
                                 }
                             )
                         }
