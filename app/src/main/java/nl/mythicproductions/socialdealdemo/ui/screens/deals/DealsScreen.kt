@@ -1,6 +1,7 @@
 package nl.mythicproductions.socialdealdemo.ui.screens.deals
 
 import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import nl.mythicproductions.socialdealdemo.data.deal.Deal
 import nl.mythicproductions.socialdealdemo.ui.kit.DealCard
+import nl.mythicproductions.socialdealdemo.ui.kit.Greeter
 import nl.mythicproductions.socialdealdemo.ui.screens.dealDetail.DealDetailRoute
 
 @Composable
@@ -23,14 +25,15 @@ fun DealsScreen(navController: NavController, viewModel: DealsScreenViewModel = 
     DealsScreenLayout(
         deals = deals,
         onAction = { action ->
-        when (action) {
-            is DealScreenActions.NavigateToDealDetail -> {
-                navController.navigate(DealDetailRoute(dealId = action.dealId))
+            when (action) {
+                is DealScreenActions.NavigateToDealDetail -> {
+                    navController.navigate(DealDetailRoute(dealId = action.dealId))
+                }
+
+                is DealScreenActions.FavoriteDeal -> viewModel.favoriteDeal(action.dealId)
+                is DealScreenActions.UnfavoriteDeal -> viewModel.unfavoriteDeal(action.dealId)
             }
-            is DealScreenActions.FavoriteDeal -> viewModel.favoriteDeal(action.dealId)
-            is DealScreenActions.UnfavoriteDeal -> viewModel.unfavoriteDeal(action.dealId)
-        }
-    })
+        })
 }
 
 @Composable
@@ -42,6 +45,12 @@ fun DealsScreenLayout(
         verticalArrangement = spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 24.dp)
     ) {
+        item {
+            Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+                Greeter()
+            }
+        }
+
         items(deals) { deal ->
             DealCard(
                 deal = deal,

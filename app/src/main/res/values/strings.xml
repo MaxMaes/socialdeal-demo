@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SocialDealDemo</string>
+    <string name="greeting_morning">Goedemorgen!</string>
+    <string name="greeting_afternoon">Goedemiddag!</string>
+    <string name="greeting_evening">Goedeavond!</string>
+    <string name="greeting_night">Hallo nachtbraker!</string>
+    <string name="favorites_screen_header">Jouw favorieten</string>
+    <string name="favorites_empty_state_title">Geen favorieten</string>
+    <string name="favorites_empty_state_description">"Je hebt nog geen favorieten! "</string>
 </resources>
